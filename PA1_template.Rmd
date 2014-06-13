@@ -1,20 +1,54 @@
 # Reproducible Research: Peer Assessment 1
 
-
+Hello! Welcome to my first peer assesment for Reproducible Research.
+I hope you enjoy reading it.
 ## Loading and preprocessing the data
 
+First off we're going to read the data from the .csv file. And while we're at it, we want to convert the interval data into factors for later on in the analysis.
 
-
+```{r, results='hide'}
+data <- read.csv("activity.csv")
+data$interval <- as.factor(data$interval)
+```
 ## What is mean total number of steps taken per day?
 
+Here is a rough histogram of the amount of steps taken per interval.
 
+```{r}
+hist(data$steps, main = "Frequency of Steps", xlab = "Steps")
+```
 
+We also want to see what the mean and median of steps per interval are. However there are alot of NA values so we want to remove those in our calculations, that is what na.rm = TRUE does.
+
+```{r}
+mean(data$steps, na.rm = TRUE)
+median(data$steps, na.rm = TRUE)
+```
 ## What is the average daily activity pattern?
 
+Now we want to plot a line graph giving us the average steps for each time interval, regardless of day. To do this we first need to create a vector with our averages over each interval. Luckily we already turned our intervals into factors so we can use the tapply function to do this.
 
+```{r}
+means_over_interval <- tapply(data$steps, data$interval, mean, na.rm = TRUE)
+plot(levels(data$interval), means_over_interval, type = "l", main = "Means by Interval", xlab = "Interval", ylab = "Mean")
+```
 
+Let's find the maximum average number of steps and which interval it's in:
+
+```{r}
+means_over_interval[which.max(means_over_interval)]
+```
 ## Imputing missing values
 
+Now, it can be annoying having to specify certain functions to ignore NA values. Let's see how many there are in our steps column:
+
+```{r}
+sum(is.na(data$steps))
+```
+
+Yikes that's alot! About 13% of out step data is filled in with NAs, so I want to find a way to fill them in with a value that makes sense. It's unfair to assume these values would be 0 as an NA value could mean anything. So I'm going to fill in the NA values with the average over the interval that we have already calculated for it's respective interval.
 
 
-## Are there differences in activity patterns between weekdays and weekends?
+Nevermind, fuck it I don't have time to finish this.
+
+Hope you enjoyed it!
